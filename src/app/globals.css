@@ -1196,36 +1196,62 @@ a { text-decoration: none; color: inherit; }
   padding: 0 48px;
 }
 
-/* ── City belt: static full-width strip ──
-   The original marquee sized this by HEIGHT with width:auto. At the collage's
-   6.4:1 ratio that renders ~2600px wide, so only three or four cities were ever
-   on screen and the rest scrolled past. The point of the strip is that someone
-   sees their own city, which a carousel works against. Now all eight show at
-   once, and each panel is a link to that city's page. */
+/* ── City belt: continuous marquee ──
+   Two identical copies side by side, track translates exactly -50%. At the
+   restart copy two sits precisely where copy one began, so the seam is
+   invisible and the loop never jumps.
+
+   The original sized this by HEIGHT with width:auto at up to 406px. At the
+   collage's 6.4:1 ratio that is ~2600px wide, so barely four cities were on
+   screen. Capped lower here so roughly six are visible while it moves. */
+@keyframes cityBelt {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
 .city-belt-wrap {
   position: relative;
   width: 100%;
   margin-top: 52px;
+  overflow: hidden;
 }
-.city-belt-scroll {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+/* Soft edges so panels enter and leave rather than being chopped off. */
+.city-belt-wrap::before,
+.city-belt-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 90px;
+  z-index: 3;
+  pointer-events: none;
 }
-.city-belt-scroll::-webkit-scrollbar { display: none; }
+.city-belt-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, #ffffff, transparent);
+}
+.city-belt-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, #ffffff, transparent);
+}
+.city-belt {
+  display: flex;
+  width: max-content;
+  animation: cityBelt 46s linear infinite;
+  will-change: transform;
+}
+/* Pause on hover so the panel links can actually be clicked. */
+.city-belt-wrap:hover .city-belt,
+.city-belt-wrap:focus-within .city-belt {
+  animation-play-state: paused;
+}
 .city-belt-frame {
   position: relative;
-  width: 100%;
-  /* Narrower than this and the strip is too short to read the city names,
-     so it holds a usable size and the container scrolls instead. */
-  min-width: 860px;
+  flex-shrink: 0;
   line-height: 0;
 }
 .city-belt-frame img {
-  width: 100%;
-  height: auto;
+  height: clamp(190px, 21vw, 300px);
+  width: auto;
   display: block;
 }
 /* Eight equal hotspots, one per panel in the collage. */
@@ -1238,20 +1264,18 @@ a { text-decoration: none; color: inherit; }
 .city-belt-link {
   position: relative;
   display: block;
-  border-right: 1px solid rgba(255,255,255,0.10);
   transition: background 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
 }
-.city-belt-link:last-child { border-right: none; }
-/* The city name is painted into the image already; this label exists for
-   screen readers and as the hover affordance. */
+/* The city name is painted into the image already; this label is the hover
+   affordance and the accessible name. */
 .city-belt-link span {
   position: absolute;
   left: 0; right: 0;
-  bottom: 12%;
+  bottom: 11%;
   text-align: center;
   font-family: var(--text);
   font-weight: 700;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #fff;
@@ -1264,12 +1288,19 @@ a { text-decoration: none; color: inherit; }
 .city-belt-link span::after { content: ' \2192'; }
 .city-belt-link:hover,
 .city-belt-link:focus-visible {
-  background: linear-gradient(180deg, rgba(13,74,92,0) 40%, rgba(13,74,92,0.58) 100%);
+  background: linear-gradient(180deg, rgba(13,74,92,0) 40%, rgba(13,74,92,0.6) 100%);
   outline: none;
 }
 .city-belt-link:hover span,
 .city-belt-link:focus-visible span { opacity: 1; transform: translateY(0); }
 .city-belt-link:focus-visible { box-shadow: inset 0 0 0 3px var(--teal-lt); }
+
+/* An endless marquee is a problem for anyone sensitive to motion, so stop it
+   and let the strip sit still for them. */
+@media (prefers-reduced-motion: reduce) {
+  .city-belt { animation: none; }
+  .city-belt-link span { transition: none; }
+}
 .areas-h2 {
   font-family: var(--display);
   font-weight: 700;
