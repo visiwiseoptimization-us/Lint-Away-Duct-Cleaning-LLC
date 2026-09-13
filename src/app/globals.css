@@ -1196,48 +1196,80 @@ a { text-decoration: none; color: inherit; }
   padding: 0 48px;
 }
 
-/* ── City belt marquee ── */
-@keyframes cityBelt {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
+/* ── City belt: static full-width strip ──
+   The original marquee sized this by HEIGHT with width:auto. At the collage's
+   6.4:1 ratio that renders ~2600px wide, so only three or four cities were ever
+   on screen and the rest scrolled past. The point of the strip is that someone
+   sees their own city, which a carousel works against. Now all eight show at
+   once, and each panel is a link to that city's page. */
 .city-belt-wrap {
   position: relative;
   width: 100%;
   margin-top: 52px;
-  overflow: hidden;
-  /* fade left & right edges */
 }
-.city-belt-wrap::before,
-.city-belt-wrap::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 120px;
-  z-index: 2;
-  pointer-events: none;
+.city-belt-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.city-belt-wrap::before {
-  left: 0;
-  background: linear-gradient(to right, #ffffff, transparent);
+.city-belt-scroll::-webkit-scrollbar { display: none; }
+.city-belt-frame {
+  position: relative;
+  width: 100%;
+  /* Narrower than this and the strip is too short to read the city names,
+     so it holds a usable size and the container scrolls instead. */
+  min-width: 860px;
+  line-height: 0;
 }
-.city-belt-wrap::after {
-  right: 0;
-  background: linear-gradient(to left, #ffffff, transparent);
-}
-.city-belt {
-  display: flex;
-  width: max-content;
-  animation: cityBelt 40s linear infinite;
-  will-change: transform;
-}
-.city-belt img {
-  height: clamp(200px, 28vw, 406px);
-  width: auto;
+.city-belt-frame img {
+  width: 100%;
+  height: auto;
   display: block;
-  flex-shrink: 0;
 }
+/* Eight equal hotspots, one per panel in the collage. */
+.city-belt-links {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+}
+.city-belt-link {
+  position: relative;
+  display: block;
+  border-right: 1px solid rgba(255,255,255,0.10);
+  transition: background 0.25s var(--ease-out), box-shadow 0.25s var(--ease-out);
+}
+.city-belt-link:last-child { border-right: none; }
+/* The city name is painted into the image already; this label exists for
+   screen readers and as the hover affordance. */
+.city-belt-link span {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 12%;
+  text-align: center;
+  font-family: var(--text);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+  line-height: 1.2;
+}
+.city-belt-link span::after { content: ' \2192'; }
+.city-belt-link:hover,
+.city-belt-link:focus-visible {
+  background: linear-gradient(180deg, rgba(13,74,92,0) 40%, rgba(13,74,92,0.58) 100%);
+  outline: none;
+}
+.city-belt-link:hover span,
+.city-belt-link:focus-visible span { opacity: 1; transform: translateY(0); }
+.city-belt-link:focus-visible { box-shadow: inset 0 0 0 3px var(--teal-lt); }
 .areas-h2 {
   font-family: var(--display);
   font-weight: 700;

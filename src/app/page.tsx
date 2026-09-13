@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import CityBelt from '@/components/CityBelt';
 import CityGrid from '@/components/CityGrid';
 import CtaBanner from '@/components/CtaBanner';
 import QuoteForm from '@/components/QuoteForm';
@@ -721,17 +722,12 @@ export default function Home() {
           <p className="areas-sub reveal delay-2">From Ahwatukee to Scottsdale — same-day available in every city.</p>
         </div>
 
-        {/* City belt — loops right-to-left continuously */}
-        {/* SAVE YOUR COLLAGE AS: city-collage.jpg in the same folder as this HTML file */}
-        <div className="city-belt-wrap">
-          <div className="city-belt">
-            <img src="/city-collage.jpg" alt="Phoenix Valley cities — Tempe, Scottsdale, Chandler, Mesa, Gilbert, Ahwatukee, Phoenix, Paradise Valley" />
-            <img src="/city-collage.jpg" alt="" aria-hidden="true" />
-          </div>
-        </div>
+        {/* All eight cities, static and full width, each panel linking to
+            its own landing page. */}
+        <CityBelt />
 
-        {/* The belt above is decorative. THIS is the crawlable service-area list:
-            real links, real text, one indexable landing page per city. */}
+        {/* Crawlable text backup for the strip above: real link text plus the
+            county, and the readable version on a phone. */}
         <CityGrid />
       </section>
 
