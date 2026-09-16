@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { citySlugs } from '@/data/cities';
-import { serviceSlugs } from '@/data/services';
+import { citySlugs, cityBySlug } from '@/data/cities';
+import { serviceSlugs, serviceBySlug } from '@/data/services';
+import { business } from '@/data/business';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -83,15 +84,102 @@ async function saveToSupabase(lead: Lead, meta: Record<string, unknown>) {
   return { ok: res.ok, skipped: false as const, status: res.status };
 }
 
+/**
+ * Escape anything that came from the form before it goes into HTML.
+ *
+ * Every field here is attacker-controlled. Without this, someone could put
+ * markup — or a link — in the message box and it would render live inside the
+ * notification email. Email clients are a phishing surface like any other.
+ */
+function esc(s: string) {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/** Turn the stored slugs back into something a human reads at a glance. */
+function readable(lead: Lead) {
+  const city =
+    lead.city === 'other'
+      ? 'Elsewhere in the Valley'
+      : (cityBySlug.get(lead.city)?.fullName ?? lead.city);
+  const service =
+    lead.service === 'not-sure'
+      ? 'Not sure yet — needs advice'
+      : (serviceBySlug.get(lead.service)?.name ?? lead.service);
+  return { city, service };
+}
+
 async function notify(lead: Lead) {
   const key = process.env.RESEND_API_KEY;
   const to = process.env.LEAD_NOTIFICATION_EMAIL;
-  const from = process.env.LEAD_FROM_EMAIL ?? 'leads@lintawayductcleaning.com';
+  // Resend recommends sending from a subdomain so the sending reputation stays
+  // separate from the company's regular mail on the root domain.
+  const from = process.env.LEAD_FROM_EMAIL ?? 'Lint Away Website <leads@send.lintawayductcleaning.com>';
   if (!key || !to) return { ok: false, skipped: true as const };
 
-  const rows = Object.entries(lead)
-    .map(([k, v]) => `<tr><td style="padding:4px 12px 4px 0"><b>${k}</b></td><td>${v || '—'}</td></tr>`)
-    .join('');
+  const { city, service } = readable(lead);
+  const telHref = lead.phone.replace(/[^\d+]/g, '');
+
+  // Built for a phone: these get read in a van between jobs, not at a desk.
+  // Big tap targets for call and email, details underneath.
+  const html = `<!doctype html>
+<html><body style="margin:0;padding:0;background:#f4f6fa;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <div style="max-width:560px;margin:0 auto;padding:24px 16px;">
+    <div style="background:#0D4A5C;border-radius:16px 16px 0 0;padding:22px 24px;">
+      <div style="color:#3BC6EA;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;">New quote request</div>
+      <div style="color:#fff;font-size:24px;font-weight:700;margin-top:6px;">${esc(lead.name)}</div>
+      <div style="color:rgba(255,255,255,.75);font-size:15px;margin-top:4px;">${esc(service)} &middot; ${esc(city)}</div>
+    </div>
+
+    <div style="background:#fff;padding:22px 24px;">
+      <table role="presentation" width="100%" style="border-collapse:collapse;">
+        <tr>
+          <td style="padding:0 6px 10px 0;width:50%;">
+            <a href="tel:${esc(telHref)}" style="display:block;text-align:center;background:#E8192C;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:14px 10px;border-radius:10px;">Call ${esc(lead.phone)}</a>
+          </td>
+          <td style="padding:0 0 10px 6px;width:50%;">
+            <a href="mailto:${esc(lead.email)}" style="display:block;text-align:center;background:#EBF8FC;color:#0D4A5C;text-decoration:none;font-weight:700;font-size:15px;padding:14px 10px;border-radius:10px;">Email back</a>
+          </td>
+        </tr>
+      </table>
+
+      <table role="presentation" width="100%" style="border-collapse:collapse;font-size:15px;color:#2E2E4A;margin-top:8px;">
+        <tr><td style="padding:9px 0;border-top:1px solid #E8EAF0;color:#8C8FA0;width:96px;">Phone</td><td style="padding:9px 0;border-top:1px solid #E8EAF0;">${esc(lead.phone)}</td></tr>
+        <tr><td style="padding:9px 0;border-top:1px solid #E8EAF0;color:#8C8FA0;">Email</td><td style="padding:9px 0;border-top:1px solid #E8EAF0;">${esc(lead.email)}</td></tr>
+        <tr><td style="padding:9px 0;border-top:1px solid #E8EAF0;color:#8C8FA0;">City</td><td style="padding:9px 0;border-top:1px solid #E8EAF0;">${esc(city)}</td></tr>
+        <tr><td style="padding:9px 0;border-top:1px solid #E8EAF0;color:#8C8FA0;">Service</td><td style="padding:9px 0;border-top:1px solid #E8EAF0;">${esc(service)}</td></tr>
+      </table>
+
+      ${
+        lead.message
+          ? `<div style="margin-top:16px;padding:14px 16px;background:#F5F7FF;border-left:3px solid #45ABC0;border-radius:0 8px 8px 0;font-size:15px;line-height:1.6;color:#2E2E4A;white-space:pre-wrap;">${esc(lead.message)}</div>`
+          : ''
+      }
+    </div>
+
+    <div style="background:#fff;border-radius:0 0 16px 16px;padding:14px 24px 20px;border-top:1px solid #E8EAF0;color:#8C8FA0;font-size:12px;line-height:1.6;">
+      Sent from the quote form on ${esc(business.url.replace('https://', ''))}.
+      Reply to this email and it goes straight to the customer.
+    </div>
+  </div>
+</body></html>`;
+
+  const text = [
+    `NEW QUOTE REQUEST`,
+    ``,
+    `${lead.name}`,
+    `${service} — ${city}`,
+    ``,
+    `Phone: ${lead.phone}`,
+    `Email: ${lead.email}`,
+    lead.message ? `\nMessage:\n${lead.message}` : '',
+    ``,
+    `Sent from the quote form on ${business.url}.`,
+  ].join('\n');
 
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -99,11 +187,18 @@ async function notify(lead: Lead) {
     body: JSON.stringify({
       from,
       to: to.split(',').map((s) => s.trim()),
+      // Hitting reply goes to the customer, not to the website.
       reply_to: lead.email,
-      subject: `New quote request — ${lead.name} (${lead.city})`,
-      html: `<h2>New quote request</h2><table>${rows}</table>`,
+      // Service and city up front so it is triageable from the inbox list.
+      subject: `${service} — ${city} — ${lead.name}`,
+      html,
+      text,
     }),
   });
+
+  if (!res.ok) {
+    console.error('[quote] Resend rejected the send:', res.status, await res.text().catch(() => ''));
+  }
   return { ok: res.ok, skipped: false as const };
 }
 
