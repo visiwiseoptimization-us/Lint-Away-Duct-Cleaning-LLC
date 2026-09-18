@@ -38,7 +38,7 @@ ${s.benefits.map((b) => `- ${b}`).join('\n')}
 **Who needs it**
 ${s.whoNeedsIt.map((b) => `- ${b}`).join('\n')}
 
-**Pricing**: $${s.priceLow}–$${s.priceHigh}. **Duration**: ${s.durationMinutes[0]}–${s.durationMinutes[1]} minutes.
+**Pricing**: quoted per job after an on-site look — no published price list or flat rate. The estimate is free and the price is fixed before work begins. **Duration**: ${s.durationMinutes[0]}–${s.durationMinutes[1]} minutes.
 
 **FAQ**
 ${s.faqs.map((f) => `- **${f.q}** ${f.a}`).join('\n')}

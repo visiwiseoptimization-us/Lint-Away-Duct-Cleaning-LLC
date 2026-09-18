@@ -14,7 +14,14 @@ for(const p of paths){
     if(t==='PostalAddress'&&n.streetAddress) issues.push(`${p}: PostalAddress has streetAddress — wrong for a service-area business`);
     if(t==='GeoCoordinates'&&(typeof n.latitude!=='number'||typeof n.longitude!=='number')) issues.push(`${p}: GeoCoordinates not numeric`);
     if(t==='Question'&&!n.acceptedAnswer?.text) issues.push(`${p}: Question without an answer`);
-    if(t==='Offer'&&!n.priceCurrency&&!n.priceSpecification) issues.push(`${p}: Offer without price info`);
+    // Pricing is deliberately absent from this site: every job is quoted after
+    // an on-site look, so there is nothing honest to mark up. This guard is
+    // inverted on purpose — it fails if ANY price field reappears in the graph,
+    // which is what stops a future edit from quietly reintroducing one.
+    if(t==='Offer'||t==='AggregateOffer'||t==='PriceSpecification'||t==='UnitPriceSpecification')
+      issues.push(`${p}: ${t} node present — this site publishes no pricing`);
+    for(const k of ['price','priceRange','priceCurrency','minPrice','maxPrice','lowPrice','highPrice','priceSpecification'])
+      if(k in n) issues.push(`${p}: price field "${k}" present — this site publishes no pricing`);
     if(n['@id']&&typeof n['@id']!=='string') issues.push(`${p}: non-string @id`);
     Object.values(n).forEach(walk);
   };

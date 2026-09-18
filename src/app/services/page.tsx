@@ -67,12 +67,10 @@ export default function ServicesIndex() {
                     <h3>Typical job</h3>
                     <ul className="check-list">
                       <li>
-                        ${s.priceLow}–${s.priceHigh} depending on scope
-                      </li>
-                      <li>
                         {s.durationMinutes[0]}–{s.durationMinutes[1]} minutes on site
                       </li>
                       <li>Camera inspection before and after</li>
+                      <li>Free estimate, quoted before any work starts</li>
                     </ul>
                   </div>
                 </div>

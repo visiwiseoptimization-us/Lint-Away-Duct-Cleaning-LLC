@@ -17,9 +17,10 @@ export default function Terms() {
 
         <h2>Quotes and pricing</h2>
         <p>
-          Price ranges shown on this site are typical ranges, not quotes. The actual price depends on
-          the number of systems, vent count, run length, accessibility and condition, and is
-          confirmed in writing before any work begins.
+          This site does not publish prices, price ranges or flat rates. Every job is quoted
+          individually after we look at the property, because the work depends on the number of
+          systems, vent count, run length, accessibility and condition. The estimate is free, and the
+          price is confirmed in writing before any work begins.
         </p>
 
         <h2>Guides and general information</h2>

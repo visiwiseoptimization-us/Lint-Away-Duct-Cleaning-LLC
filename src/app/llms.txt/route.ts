@@ -52,7 +52,7 @@ ${services
     (s) => `### ${s.name}
 ${s.answer}
 
-- Typical price range: $${s.priceLow}–$${s.priceHigh}
+- Pricing: quoted per job after an on-site look. No published price list or flat rate. The estimate is free and the price is fixed before work begins.
 - Typical duration: ${s.durationMinutes[0]}–${s.durationMinutes[1]} minutes
 - Page: ${U}/services/${s.slug}`,
   )

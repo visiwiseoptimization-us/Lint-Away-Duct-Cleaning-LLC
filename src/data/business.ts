@@ -37,7 +37,9 @@ export const business = {
   geo: { lat: 33.4484, lng: -112.074 },
   serviceRadiusMeters: 48000, // ~30 miles, covers the Valley
 
-  priceRange: '$$',
+  // No priceRange. Every job is quoted after an on-site look, so there is no
+  // range to publish — and `priceRange: '$$'` in the LocalBusiness node is
+  // exactly the kind of unsupported claim this site avoids elsewhere.
   foundingDate: '2019',
 
   openingHours: [

@@ -108,10 +108,8 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
 
           <div className="fact-strip">
             <div className="fact">
-              <div className="fact-num">
-                ${s.priceLow}–${s.priceHigh}
-              </div>
-              <div className="fact-label">Typical range</div>
+              <div className="fact-num">Free</div>
+              <div className="fact-label">On-site estimate</div>
             </div>
             <div className="fact">
               <div className="fact-num">

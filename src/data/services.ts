@@ -21,9 +21,6 @@ export type Service = {
   whoNeedsIt: string[];
   /** Drives the FAQPage schema on every service and city+service page. */
   faqs: { q: string; a: string }[];
-  /** Typical range shown as an Offer. Honest ranges beat fake precision. */
-  priceLow: number;
-  priceHigh: number;
   durationMinutes: [number, number];
 };
 
@@ -68,8 +65,6 @@ export const services: Service[] = [
         a: 'A consumer brush kit will reach the first few feet of a straight run. It will not clear a bend, will not reach a roof termination, and gives you no way to verify the run is actually clear. Professional service uses a rotating brush on a powered line plus a camera to confirm the result.',
       },
     ],
-    priceLow: 99,
-    priceHigh: 249,
     durationMinutes: [45, 120],
   },
   {
@@ -108,8 +103,6 @@ export const services: Service[] = [
         a: 'No. We schedule around operating hours, including overnight and early-morning windows for laundromats and hotels, and work unit by unit on multifamily properties so no more than a small block of machines is offline at a time.',
       },
     ],
-    priceLow: 349,
-    priceHigh: 2500,
     durationMinutes: [120, 480],
   },
   {
@@ -136,8 +129,8 @@ export const services: Service[] = [
     ],
     faqs: [
       {
-        q: 'How much does air duct cleaning cost in Phoenix?',
-        a: 'Most Phoenix-area homes fall between $350 and $700 for a full system. The range is driven by the number of HVAC systems, the number of supply and return vents, the square footage, and whether the ductwork is accessible. Quotes far below that range usually cover register vacuuming only, not the full system.',
+        q: 'How is air duct cleaning priced in Phoenix?',
+        a: 'Every home is quoted individually, because the work is driven by things we have to look at first: the number of HVAC systems, the number of supply and return vents, the square footage, and whether the ductwork is accessible. We give you a firm number before any work starts, and the estimate is free. Be wary of anyone who quotes a whole-home price sight unseen — a flat rate that low usually covers register vacuuming, not the full system.',
       },
       {
         q: 'How long does air duct cleaning take?',
@@ -152,8 +145,6 @@ export const services: Service[] = [
         a: 'Cleaning removes what is inside the ducts. Sealing closes gaps and leaks in the duct system so conditioned air stops escaping into attics and wall cavities. They solve different problems — cleaning addresses air quality and debris, sealing addresses efficiency loss — and a home can need one, the other, or both.',
       },
     ],
-    priceLow: 349,
-    priceHigh: 799,
     durationMinutes: [120, 360],
   },
   {
@@ -192,8 +183,6 @@ export const services: Service[] = [
         a: 'Yes. Commercial duct cleaning is normally phased by zone or scheduled outside operating hours. For medical facilities we work around patient scheduling, and for restaurants we work between service periods.',
       },
     ],
-    priceLow: 800,
-    priceHigh: 6000,
     durationMinutes: [240, 960],
   },
 ];

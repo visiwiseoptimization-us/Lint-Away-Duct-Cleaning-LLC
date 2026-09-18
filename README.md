@@ -1,6 +1,6 @@
 # Lint Away Duct Cleaning — Site & Backend
 
-Next.js 15 (App Router) + Supabase, deployed on Vercel.
+Next.js 16 (App Router) + Supabase, deployed on Vercel.
 
 Built for a **service-area business with no Google Maps pin**. That constraint drives
 almost every technical decision here, so it is worth stating up front: with no map
@@ -34,7 +34,7 @@ are `NEXT_PUBLIC_`, and none should be — they are all server-only.
 | `SUPABASE_SERVICE_ROLE_KEY` | for lead storage | Service-role key. **Server-only.** Bypasses RLS by design — see below. |
 | `RESEND_API_KEY` | for lead email | Resend API key |
 | `LEAD_NOTIFICATION_EMAIL` | for lead email | Where new leads go. Comma-separate for several recipients. |
-| `LEAD_FROM_EMAIL` | optional | Defaults to `leads@lintawayductcleaning.com` |
+| `LEAD_FROM_EMAIL` | optional | Defaults to `Lint Away Website <leads@send.lintawayductcleaning.com>`. Must be on a domain verified in Resend. |
 
 If **neither** sink is configured the form still returns success and the lead is
 logged to the server console with a warning, so nothing 500s during setup — but
@@ -107,9 +107,32 @@ and explicit `City` nodes with coordinates. Different engines read different one
 address it does not serve customers from risks Google Business Profile suspension,
 and it corrupts the entity graph. `addressLocality` + `addressRegion` only.
 
-Types emitted: `HVACBusiness`/`LocalBusiness`, `WebSite`, `Service`, `Offer`,
+Types emitted: `HVACBusiness`/`LocalBusiness`, `WebSite`, `Service`, `ReserveAction`,
 `FAQPage`, `BlogPosting`, `BreadcrumbList`, `ItemList`, `City`, `GeoCircle`,
 `GeoCoordinates`, `OpeningHoursSpecification`, `ContactPoint`, `SpeakableSpecification`.
+
+### No pricing, anywhere
+The site publishes no prices, price ranges or flat rates — not in the copy, not in
+`src/data`, and not in the structured data. Every job is quoted after an on-site look.
+
+That means **no `Offer` node**. A schema.org `Offer` without price information is not a
+partial Offer, it is an invalid one — Google reports the absent price as an error — and
+an `Offer` carrying an invented range would misrepresent what a customer pays. In its
+place each `Service` carries a `ReserveAction` pointing at the contact page, so the thing
+an engine surfaces is "get a free quote" rather than "starting at $X". `priceRange` is
+gone from the `LocalBusiness` node for the same reason.
+
+`scripts/check-schema.mjs` enforces this with an **inverted** guard: it fails if an
+`Offer`, `AggregateOffer` or `PriceSpecification` node appears, or if any node carries
+`price`, `priceRange`, `priceCurrency`, `minPrice`, `maxPrice`, `lowPrice`, `highPrice`
+or `priceSpecification`. Re-adding pricing is therefore a deliberate act that breaks the
+build checks, not something that can drift back in.
+
+Three blog articles still mention dollar figures. Those are in the source `.docx`
+deliverables and they are warnings about lowball competitors ("companies advertising $49
+or $99 whole-home cleaning..."), not Lint Away's prices — including one guide whose whole
+subject is what duct cleaning costs in Phoenix. They are left as written; the checks
+above cover the site's own claims, not article body copy.
 
 ### Programmatic pages, gated on real content
 City × service pages exist **only** where a supporting article backs them —
@@ -133,6 +156,29 @@ article targeting a city+service and its page appears automatically.
 
 `llms.txt` is a convention rather than a ratified standard and support varies by
 vendor. It costs one route and no maintenance, so it is worth having regardless.
+
+### The video strip loads nothing until you click it
+The three YouTube Shorts on the homepage (`src/components/ShortsStrip.tsx`,
+`src/data/videos.ts`) render as facades: a self-hosted 720x1280 WebP still per card, about
+50KB each, in `public/shorts/`. The first click swaps that one card for a real
+`youtube-nocookie.com` player, already playing.
+
+Three live `<iframe>` embeds would pull roughly 500KB-1MB of YouTube player JavaScript on
+every homepage visit and set cookies before anyone clicked anything — the heaviest thing
+on the page by an order of magnitude, for content most visitors scroll past. On a site
+built to rank, that is a self-inflicted Core Web Vitals wound.
+
+Each card also carries a plain link to the video, so a crawler or a failed hydration finds
+three real followable links rather than three dead `<div>`s.
+
+`uploadDate` in `src/data/videos.ts` is unset. Fill it in (YouTube Studio -> Content, ISO
+format `2024-08-14`) and the page will emit `VideoObject` structured data for that video,
+which is what makes it eligible for a video rich result. Google treats `uploadDate` as
+required, so the markup is gated on it rather than shipped with a guessed date.
+
+To swap a video: change the `id` in `src/data/videos.ts` and drop a matching
+`public/shorts/<id>.webp` in (the source is `https://i.ytimg.com/vi/<id>/oardefault.jpg`,
+resized to 720x1280).
 
 ### The crawlable coverage list
 The original design showed the service area as a scrolling collage image. That
@@ -199,6 +245,7 @@ city missing a crawlable link from the homepage.
 
 `scripts/check-schema.mjs` walks every JSON-LD node and fails on a `PostalAddress`
 with a `streetAddress`, non-numeric coordinates, a `Question` without an answer, an
-`Offer` without price information, and missing expected types.
+any pricing node or price field (see "No pricing, anywhere" above), and missing expected
+types.
 
-Current state: **52 pages crawled, 182 JSON-LD blocks, median 1,028 words, 0 problems.**
+Current state: **52 pages crawled, 182 JSON-LD blocks, median 1,031 words, 0 problems.**

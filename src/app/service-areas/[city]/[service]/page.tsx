@@ -153,10 +153,8 @@ export default async function CityServicePage({
 
           <div className="fact-strip">
             <div className="fact">
-              <div className="fact-num">
-                ${s.priceLow}–${s.priceHigh}
-              </div>
-              <div className="fact-label">Typical {c.name} range</div>
+              <div className="fact-num">Free</div>
+              <div className="fact-label">{c.name} estimate</div>
             </div>
             <div className="fact">
               <div className="fact-num">

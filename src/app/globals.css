@@ -1557,8 +1557,6 @@ footer {
   .cta-actions { justify-content: center; }
   .footer-top { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; text-align: center; }
-  .tiktok-strip { grid-template-columns: 1fr; }
-  .tiktok-card { max-height: 380px; }
   .partners-belt-wrap::before, .partners-belt-wrap::after { width: 60px; }
 }
 
@@ -1643,14 +1641,16 @@ footer {
 }
 
 /* ═══════════════════════════════════════════
-   TIKTOK STRIP
+   YOUTUBE SHORTS STRIP
+   Click-to-load facades: a self-hosted 9:16 still
+   per card, swapped for the real player on click.
 ═══════════════════════════════════════════ */
-.tiktok-invite {
+.shorts-invite {
   text-align: center;
   max-width: 920px;
   margin: 0 auto 40px;
 }
-.tiktok-invite-eyebrow {
+.shorts-invite-eyebrow {
   font-family: var(--text);
   font-weight: 700;
   font-size: 11px;
@@ -1659,7 +1659,7 @@ footer {
   color: var(--teal);
   margin-bottom: 12px;
 }
-.tiktok-invite-title {
+.shorts-invite-title {
   font-family: var(--display);
   font-weight: 700;
   font-size: clamp(22px, 3vw, 36px);
@@ -1667,7 +1667,7 @@ footer {
   line-height: 1.2;
   margin-bottom: 10px;
 }
-.tiktok-invite-sub {
+.shorts-invite-sub {
   font-family: var(--text);
   font-size: 16px;
   color: var(--gray);
@@ -1675,70 +1675,182 @@ footer {
   margin: 0 auto;
   line-height: 1.65;
 }
-.tiktok-strip {
+
+.shorts-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   max-width: 920px;
   margin: 0 auto 64px;
 }
-.tiktok-card {
+.shorts-card {
+  margin: 0;
+  min-width: 0;
+}
+.shorts-frame {
+  position: relative;
   border-radius: 20px;
   overflow: hidden;
   aspect-ratio: 9 / 16;
   max-height: 500px;
-  position: relative;
+  background: var(--dark-2);
   box-shadow: 0 6px 28px rgba(0,0,0,0.12);
 }
-.tiktok-placeholder {
-  width: 100%; height: 100%;
-  background: linear-gradient(160deg, var(--dark-2) 0%, var(--mid) 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 28px;
-  text-align: center;
+
+/* The facade. A real <button>, so it is focusable and keyboard-operable
+   without any ARIA patching. */
+.shorts-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
+  display: block;
+  color: inherit;
+  font: inherit;
+}
+.shorts-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.shorts-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10,22,28,0.28) 0%, rgba(10,22,28,0) 38%, rgba(10,22,28,0.42) 100%);
   transition: background 0.3s;
 }
-.tiktok-placeholder:hover {
-  background: linear-gradient(160deg, var(--mid) 0%, var(--dark-2) 100%);
+.shorts-poster:hover .shorts-scrim {
+  background: linear-gradient(180deg, rgba(10,22,28,0.36) 0%, rgba(10,22,28,0.06) 38%, rgba(10,22,28,0.5) 100%);
 }
-.tiktok-play-icon {
+.shorts-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
   width: 64px; height: 64px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.14);
+  border: 2px solid rgba(255,255,255,0.55);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   display: flex; align-items: center; justify-content: center;
-  font-size: 24px; color: white;
-  padding-left: 4px;
-  transition: background 0.2s, transform 0.2s;
+  color: #fff;
+  padding-left: 3px;
+  transition: background 0.2s, transform 0.2s, border-color 0.2s;
 }
-.tiktok-placeholder:hover .tiktok-play-icon {
-  background: rgba(59,198,234,0.25);
+.shorts-poster:hover .shorts-play {
+  background: rgba(59,198,234,0.32);
   border-color: var(--teal-lt);
-  transform: scale(1.08);
+  transform: translate(-50%, -50%) scale(1.08);
 }
-.tiktok-label {
-  font-family: var(--text);
-  font-weight: 600;
-  font-size: 14px;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.4;
+.shorts-poster:focus-visible {
+  outline: 3px solid var(--teal-lt);
+  outline-offset: -3px;
 }
-.tiktok-cta-badge {
+.shorts-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--text);
   font-weight: 700;
   font-size: 11px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--teal-lt);
-  background: rgba(59,198,234,0.15);
-  border: 1px solid rgba(59,198,234,0.35);
+  color: #fff;
+  background: rgba(15,27,34,0.62);
+  border: 1px solid rgba(255,255,255,0.22);
   border-radius: 50px;
-  padding: 6px 14px;
+  padding: 5px 11px 5px 9px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.shorts-badge svg { color: #FF0033; }
+
+.shorts-player {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.shorts-caption {
+  font-family: var(--text);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--gray);
+  margin-top: 12px;
+  text-align: center;
+}
+.shorts-caption a {
+  color: var(--dark);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.shorts-caption a:hover {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+}
+
+.shorts-more {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shorts-scrim, .shorts-play { transition: none; }
+  .shorts-poster:hover .shorts-play { transform: translate(-50%, -50%); }
+}
+
+/* Mobile: a swipeable, snapping row rather than three stacked 9:16 cards.
+   Stacking them would be ~1,700px of scrolling for content most visitors pass
+   through, and it buries the testimonials underneath. A snap carousel is also
+   how people already watch Shorts, so the gesture needs no explaining.
+
+   NOTE: this block must stay AFTER the base .shorts-* rules above. The site's
+   main 768px breakpoint lives earlier in this file, and an override placed
+   there loses to these rules on specificity ties. */
+@media (max-width: 768px) {
+  .shorts-strip {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Bleed to the section edges so the next card peeks in, which is the cue
+       that there is more to swipe to. */
+    margin-inline: -24px;
+    padding: 4px 24px 8px;
+    max-width: none;
+    margin-bottom: 40px;
+  }
+  .shorts-strip::-webkit-scrollbar { display: none; }
+  .shorts-card {
+    flex: 0 0 68%;
+    scroll-snap-align: center;
+  }
+  .shorts-frame { max-height: none; }
+  .shorts-play { width: 54px; height: 54px; }
+  .shorts-caption { font-size: 13px; }
+  .shorts-more {
+    flex: 0 0 100%;
+    margin-top: 0;
+    scroll-snap-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 /* ═══════════════════════════════════════════

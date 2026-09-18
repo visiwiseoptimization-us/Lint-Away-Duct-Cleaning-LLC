@@ -57,7 +57,6 @@ export function businessNode() {
     description:
       'Air duct cleaning and dryer vent cleaning for residential and commercial properties across the Phoenix Valley, including Phoenix, Tempe, Mesa, Chandler, Gilbert, Scottsdale, Ahwatukee and Paradise Valley.',
     slogan: business.tagline,
-    priceRange: business.priceRange,
     foundingDate: business.foundingDate,
     image: `${U}/van.png`,
     logo: { '@type': 'ImageObject', url: `${U}/van.png` },
@@ -154,18 +153,27 @@ export function serviceNode(service: Service, city?: City) {
       '@type': 'Audience',
       audienceType: service.segment === 'Residential' ? 'Homeowners' : 'Business owners and property managers',
     },
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: 'USD',
-      priceSpecification: {
-        '@type': 'PriceSpecification',
-        minPrice: service.priceLow,
-        maxPrice: service.priceHigh,
-        priceCurrency: 'USD',
+    // Deliberately no `offers` node.
+    //
+    // Lint Away quotes every job individually after looking at the property,
+    // so there is no price to publish. A schema.org Offer without price
+    // information is worse than no Offer at all: Google treats the missing
+    // price as an error rather than an omission, and an Offer carrying a made-up
+    // range would misrepresent what the customer will actually pay. The
+    // `potentialAction` below is what we want engines to surface instead —
+    // "get a free quote", not "starting at $X".
+    potentialAction: {
+      '@type': 'ReserveAction',
+      name: city ? `Get a free ${service.shortName.toLowerCase()} quote in ${city.name}` : `Get a free ${service.shortName.toLowerCase()} quote`,
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${U}/contact-us`,
+        actionPlatform: [
+          'https://schema.org/DesktopWebPlatform',
+          'https://schema.org/MobileWebPlatform',
+        ],
       },
-      availability: 'https://schema.org/InStock',
-      areaServed: city ? city.fullName : 'Phoenix Valley, AZ',
-      seller: { '@id': ids.business },
+      result: { '@type': 'Reservation', name: 'Free on-site estimate' },
     },
     termsOfService: `${U}/contact-us`,
     hoursAvailable: business.openingHours.map((h) => ({

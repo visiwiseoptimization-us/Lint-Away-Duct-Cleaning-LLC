@@ -4,6 +4,7 @@ import CityBelt from '@/components/CityBelt';
 import CityGrid from '@/components/CityGrid';
 import CtaBanner from '@/components/CtaBanner';
 import QuoteForm from '@/components/QuoteForm';
+import ShortsStrip from '@/components/ShortsStrip';
 import JsonLd from '@/components/JsonLd';
 import { services } from '@/data/services';
 import { cities } from '@/data/cities';
@@ -570,70 +571,17 @@ export default function Home() {
           <div className="proof-head">
             <div className="section-label reveal">Proof, Not Promises</div>
             <h2 className="proof-h2 reveal delay-1"><span className="accent">500M+ People</span> Have Watched Us Clean</h2>
-            <p className="proof-sub reveal delay-2">TikTok · YouTube · Instagram · Facebook — we post every job because the results speak for themselves.</p>
+            <p className="proof-sub reveal delay-2">YouTube · TikTok · Instagram · Facebook — we post every job because the results speak for themselves.</p>
           </div>
 
-          {/* ─── TikTok Strip ─── */}
-          <div className="tiktok-invite reveal delay-2">
-            <div className="tiktok-invite-eyebrow">🎵 Follow Our Journey on TikTok</div>
-            <h3 className="tiktok-invite-title">See the Dirt. See the Clean. <span className="accent">No Filter.</span></h3>
-            <p className="tiktok-invite-sub">We film every job — before, during, after. Watch real Phoenix Valley homes breathe clean air.</p>
+          {/* ─── YouTube Shorts strip ─── */}
+          <div className="shorts-invite reveal delay-2">
+            <div className="shorts-invite-eyebrow">Watch on YouTube</div>
+            <h3 className="shorts-invite-title">See the Dirt. See the Clean. <span className="accent">No Filter.</span></h3>
+            <p className="shorts-invite-sub">We film every job — before, during, after. Watch real Phoenix Valley homes breathe clean air.</p>
           </div>
 
-          <div className="tiktok-strip reveal delay-3">
-
-            {/* TikTok Embed 1 */}
-            <div className="tiktok-card">
-              <div className="tiktok-placeholder">
-                <div className="tiktok-play-icon">▶</div>
-                <div className="tiktok-label">Air Duct Before &amp; After<br />Phoenix Home Clean</div>
-                <div className="tiktok-cta-badge">📱 Watch on TikTok</div>
-              </div>
-              {/*
-                DEV SWAP — replace .tiktok-placeholder with TikTok embed:
-                <blockquote className="tiktok-embed"
-                  cite="https://www.tiktok.com/@lintawayductcleaning/video/VIDEO_ID_1"
-                  data-video-id="VIDEO_ID_1" style={{maxWidth: '100%', minWidth: '100%', height: '100%'}}>
-                </blockquote>
-                <script async={true} src="https://www.tiktok.com/embed.js"></script>
-              */}
-            </div>
-
-            {/* TikTok Embed 2 */}
-            <div className="tiktok-card">
-              <div className="tiktok-placeholder">
-                <div className="tiktok-play-icon">▶</div>
-                <div className="tiktok-label">Dryer Vent Full Clean<br />See What We Pulled Out</div>
-                <div className="tiktok-cta-badge">📱 Watch on TikTok</div>
-              </div>
-              {/*
-                DEV SWAP — replace .tiktok-placeholder with TikTok embed:
-                <blockquote className="tiktok-embed"
-                  cite="https://www.tiktok.com/@lintawayductcleaning/video/VIDEO_ID_2"
-                  data-video-id="VIDEO_ID_2" style={{maxWidth: '100%', minWidth: '100%', height: '100%'}}>
-                </blockquote>
-                <script async={true} src="https://www.tiktok.com/embed.js"></script>
-              */}
-            </div>
-
-            {/* TikTok Embed 3 */}
-            <div className="tiktok-card">
-              <div className="tiktok-placeholder">
-                <div className="tiktok-play-icon">▶</div>
-                <div className="tiktok-label">Live Camera Inspection<br />What's Really in Your Vents?</div>
-                <div className="tiktok-cta-badge">📱 Watch on TikTok</div>
-              </div>
-              {/*
-                DEV SWAP — replace .tiktok-placeholder with TikTok embed:
-                <blockquote className="tiktok-embed"
-                  cite="https://www.tiktok.com/@lintawayductcleaning/video/VIDEO_ID_3"
-                  data-video-id="VIDEO_ID_3" style={{maxWidth: '100%', minWidth: '100%', height: '100%'}}>
-                </blockquote>
-                <script async={true} src="https://www.tiktok.com/embed.js"></script>
-              */}
-            </div>
-
-          </div>
+          <ShortsStrip />
 
           <div className="proof-testimonials">
 
