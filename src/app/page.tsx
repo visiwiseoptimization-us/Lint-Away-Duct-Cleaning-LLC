@@ -380,7 +380,10 @@ export default function Home() {
             <div className="hero-stat-label">Total Social Views</div>
           </div>
           <div className="hero-stat" style={{animationDelay: '0.95s'}}>
-            <div className="hero-stat-num">5<span className="stat-accent">★</span></div>
+            <div className="hero-stat-num">
+              {business.socialProof.rating}
+              <span className="stat-accent">★</span>
+            </div>
             <div className="hero-stat-label">Google Rating</div>
           </div>
           <div className="hero-stat" style={{animationDelay: '1.1s'}}>
@@ -473,11 +476,18 @@ export default function Home() {
                 <div className="why-stat-label">Social Views</div>
               </div>
               <div className="why-stat reveal delay-4">
-                <div className="why-stat-num">5<sup style={{color: 'var(--blue)'}}>★</sup></div>
+                <div className="why-stat-num">
+                  {business.socialProof.rating}
+                  <sup style={{color: 'var(--blue)'}}>★</sup>
+                </div>
                 <div className="why-stat-label">Google Rating</div>
               </div>
               <div className="why-stat reveal delay-5">
-                <div className="why-stat-num"><span className="stat-count" data-target="200">0</span><sup>+</sup></div>
+                <div className="why-stat-num">
+                  <span className="stat-count" data-target={business.socialProof.reviewCount}>
+                    0
+                  </span>
+                </div>
                 <div className="why-stat-label">Reviews</div>
               </div>
             </div>
