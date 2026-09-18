@@ -190,17 +190,33 @@ eight real landing pages. This was the single biggest structural gap in the desi
 
 ## Things that need a human decision before launch
 
-1. **"5.0 on Google · 200+ reviews"** in the hero, and `socialProof` in
-   `src/data/business.ts` (4.9 / 187). These conflict with each other, and if there
-   is no Google Business Profile, the Google rating claim cannot be substantiated.
-   Verify the real numbers or change the copy. `/reviews` deliberately emits **no**
-   `AggregateRating` markup for the same reason — marking up unverifiable review
-   counts is a manual-action risk. The plumbing is ready when real reviews exist.
+1. ~~**"5.0 on Google · 200+ reviews"** in the hero.~~ **Resolved 2026-09-18.**
+   The hero claimed a 5.0 rating the business does not have, and it disagreed with
+   `socialProof` in `src/data/business.ts` (then 4.9 / 187). Both now read **4.9 /
+   222**, verified against the live Google Business Profile, and the hero renders
+   from `business.ts` rather than hard-coded text — so the two can no longer drift
+   apart. Update the numbers in one place.
 
-2. **Get a Google Business Profile with a hidden address.** A service-area business
-   *can* have one — you set a service area and hide the street address. This is by
-   far the highest-leverage local SEO action available and no amount of on-site work
-   substitutes for it. Everything in this repo is built to complement it, not replace it.
+   **The site still emits no `AggregateRating`, and that has not changed now that
+   the numbers are verifiable.** Google's review snippet guidelines say "Don't
+   aggregate reviews or ratings from other websites", and separately that where
+   "the entity that's being reviewed controls the reviews about itself", its
+   `LocalBusiness` markup is "ineligible for star review feature". Those reviews
+   live on Google, not here. Stating a real rating in body copy is ordinary
+   marketing; marking up another platform's review corpus as first-party
+   structured data is a manual-action risk. The plumbing is ready if Lint Away
+   ever collects reviews directly on this site — that is the condition that
+   changes the answer, not the rating being true.
+
+2. ~~**Get a Google Business Profile with a hidden address.**~~ **Already done.**
+   Lint Away has a verified Google Business Profile listing "Areas served: Tempe and
+   nearby areas" with no street address — exactly the service-area configuration this
+   site was built to complement. This changes the framing of the whole SEO layer: the
+   JSON-LD and per-city pages are no longer a *substitute* for a map presence, they
+   are corroborating signals pointing at an entity Google already recognizes, which
+   is a considerably stronger position. Keep the NAP in `src/data/business.ts`
+   character-for-character identical to the GBP — name, phone, service area — because
+   entity resolution across the two is exactly what this markup is for.
 
 3. **`business.ts` placeholders** — verify `email`, `foundingDate`, the `sameAs`
    social URLs, and the `certifications` list. `sameAs` in particular feeds entity

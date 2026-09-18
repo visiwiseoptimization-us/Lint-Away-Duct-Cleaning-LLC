@@ -57,7 +57,13 @@ export default function Home() {
 
             <div className="hero-stars">
               <div className="hero-stars-icons">★★★★★</div>
-              <div className="hero-stars-text">5.0 on Google · 200+ reviews</div>
+              {/* Reads from business.ts so the hero can never drift from the
+                  data file again — the previous hard-coded "5.0 · 200+" claimed
+                  a rating the business does not have. */}
+              <div className="hero-stars-text">
+                {business.socialProof.rating} on {business.socialProof.reviewSource} ·{' '}
+                {business.socialProof.reviewCount} reviews
+              </div>
             </div>
           </div>
 

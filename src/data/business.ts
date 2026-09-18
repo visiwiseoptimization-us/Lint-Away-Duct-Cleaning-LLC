@@ -56,10 +56,22 @@ export const business = {
     'https://www.youtube.com/@lintawayductcleaning',
   ],
 
+  // Verified against the live Google Business Profile on 2026-09-18.
+  //
+  // These numbers are DISPLAYED as plain copy and are deliberately NOT emitted
+  // as AggregateRating structured data. Google's review snippet guidelines are
+  // explicit on both counts: "Don't aggregate reviews or ratings from other
+  // websites", and a business that controls the reviews about itself is
+  // "ineligible for star review feature" on LocalBusiness markup. Stating a real
+  // Google rating in body copy is ordinary marketing; marking up someone else's
+  // review corpus as your own is a manual-action risk. See src/app/reviews/page.tsx.
+  //
+  // When these change, update here only — the homepage hero reads from this.
   socialProof: {
     tiktokViews: '500M+',
     rating: 4.9,
-    reviewCount: 187,
+    reviewCount: 222,
+    reviewSource: 'Google',
   },
 
   certifications: [
