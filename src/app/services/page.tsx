@@ -96,8 +96,8 @@ export default function ServicesIndex() {
         </div>
       </section>
 
-      <QuoteForm />
       <CtaBanner />
+      <QuoteForm />
     </>
   );
 }

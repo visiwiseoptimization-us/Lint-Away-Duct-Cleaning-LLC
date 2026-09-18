@@ -222,9 +222,21 @@ eight real landing pages. This was the single biggest structural gap in the desi
    social URLs, and the `certifications` list. `sameAs` in particular feeds entity
    resolution, so a wrong URL is worse than a missing one.
 
-4. **The van illustration.** The design ships an animated SVG van with a comment
-   block explaining how to swap in the real `van.png`. Left as the SVG because it
-   animates; swapping is a design call.
+4. ~~**The van illustration.**~~ **Replaced 2026-09-18.** The placeholder SVG is
+   gone; the hero now drives a photograph of the real van (`public/van-photo.webp`,
+   380x201 displayed, exported at 2x, ~55 KB, background removed).
+
+   It also fixes a bug that had been shipping the whole time: the SVG van faced
+   **left** while `vanDrive` animated **left-to-right**, so the van spent every
+   loop reversing down the street, dust puffing off its bonnet. The photo also
+   faces left, so the scene now runs right-to-left and the dust trails from the
+   rear.
+
+   `globals.css` defines **both** `vanDriveLeft` and `vanDriveRight`. If a future
+   van asset faces the other way, switch the animation on `.van-wrap`, flip the
+   sign in `dustFade`, and move `.dust` from `right` to `left` — the comments
+   there say so. Changing one without the others is what produced the original
+   bug.
 
 5. **WordPress cutover.** `next.config.ts` already 301s the old URL structure
    (`/air-duct-cleaning-services`, `/blogs/:slug`, etc.). Before pointing DNS, export

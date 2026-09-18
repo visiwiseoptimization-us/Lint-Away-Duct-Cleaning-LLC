@@ -87,8 +87,8 @@ export default function ServiceAreasIndex() {
         </div>
       </section>
 
-      <QuoteForm />
       <CtaBanner />
+      <QuoteForm />
     </>
   );
 }

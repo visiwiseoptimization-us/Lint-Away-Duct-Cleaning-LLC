@@ -425,58 +425,89 @@ a { text-decoration: none; color: inherit; }
 .van-scene {
   position: relative;     /* normal-flow, not absolute */
   width: 100%;
-  height: 110px;
+  height: 201px;          /* matches the van image height exactly */
   z-index: 4;
   pointer-events: none;
   overflow: hidden;
 }
 
-@keyframes vanDrive {
-  from { transform: translateX(-540px); }
-  to   { transform: translateX(calc(100vw + 100px)); }
+/* ── Which way does the van drive? ───────────────────────────────────────
+   A van must travel in the direction its nose points, or it reads as
+   reversing down the street. The current photo FACES LEFT, so the scene
+   uses `vanDriveLeft`.
+
+   Both directions are defined here so swapping a future van asset is a
+   one-word change. If you drop in an image that faces RIGHT, change the
+   animation on `.van-wrap` to `vanDriveRight` AND flip `dustFade` to
+   translateX(+60px) so the dust still trails BEHIND the van rather than
+   racing ahead of it.
+   ──────────────────────────────────────────────────────────────────────── */
+@keyframes vanDriveLeft {
+  from { transform: translateX(calc(100vw + 120px)); }
+  to   { transform: translateX(-460px); }
 }
-@keyframes wheelSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+@keyframes vanDriveRight {
+  from { transform: translateX(-460px); }
+  to   { transform: translateX(calc(100vw + 120px)); }
 }
 
 .van-wrap {
   position: absolute;
   bottom: 0;
-  animation: vanDrive 26s linear infinite;
+  animation: vanDriveLeft 26s linear infinite;
   will-change: transform;
 }
 
-/* Ready-to-use styles for when you swap in a real PNG/WebP van image.
-   Just add class="van-asset-img" to your <img> tag — nothing else needed. */
 .van-asset-img {
   display: block;
-  width: 500px;
-  height: 110px;
+  width: 380px;
+  height: 201px;
   object-fit: contain;
   object-position: bottom center;
+  /* Grounds the van on the strip instead of floating over it. */
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.28));
 }
-.van-wrap .wheel-fl,
-.van-wrap .wheel-rl {
-  transform-origin: center;
-  animation: wheelSpin 1.4s linear infinite;
-}
+
+/* A photographed van has photographed wheels, so there is nothing to spin.
+   The old SVG's .wheel-fl / .wheel-rl spin rules went with it. */
 
 /* Dust puff behind van */
 @keyframes dustFade {
+  /* Drifts RIGHT because the van drives LEFT — dust is left behind, not
+     pushed ahead. Flip the sign if you flip vanDrive. */
   0%   { opacity: 0.7; transform: translateX(0) scale(1); }
-  100% { opacity: 0;   transform: translateX(-60px) scale(2.5); }
+  100% { opacity: 0;   transform: translateX(60px) scale(2.5); }
 }
+/* Anchored to the RIGHT because the van faces left — its rear wheel, and so
+   its dust, is on the right. These were on `left` back when the van drove the
+   other way; puffs coming off the bonnet was half of why the motion looked
+   wrong. Move them back to `left` if the van ever faces right again. */
 .dust {
   position: absolute;
-  bottom: 8px; left: -20px;
+  bottom: 8px; right: -20px;
   width: 28px; height: 16px;
   border-radius: 50%;
   background: rgba(212,168,48,0.45);
   animation: dustFade 0.9s ease-out infinite;
 }
-.dust:nth-child(2) { animation-delay: 0.3s; bottom: 14px; left: -10px; width: 20px; height: 12px; }
-.dust:nth-child(3) { animation-delay: 0.6s; bottom: 4px;  left: -30px; width: 16px; height: 10px; }
+.dust:nth-child(2) { animation-delay: 0.3s; bottom: 14px; right: -10px; width: 20px; height: 12px; }
+.dust:nth-child(3) { animation-delay: 0.6s; bottom: 4px;  right: -30px; width: 16px; height: 10px; }
+
+/* At 380px the van is nearly the full width of a phone, which reads as a photo
+   pasted on rather than a van driving through a scene. Scaled down so the
+   desert still frames it.
+
+   NOTE: this block must stay AFTER the base .van-* rules above. The site's main
+   768px breakpoint lives earlier in this file, and an override placed there
+   loses the specificity tie — the same trap that left the old TikTok strip
+   3-up on phones. */
+@media (max-width: 768px) {
+  .van-scene { height: 148px; }
+  .van-asset-img { width: 280px; height: 148px; }
+  .dust { bottom: 6px; width: 20px; height: 12px; }
+  .dust:nth-child(2) { bottom: 10px; width: 15px; height: 9px; }
+  .dust:nth-child(3) { bottom: 3px;  width: 12px; height: 8px; }
+}
 
 .hero-inner {
   flex: 1;

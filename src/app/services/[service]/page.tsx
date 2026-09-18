@@ -191,12 +191,12 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
         </div>
       </section>
 
+      <CtaBanner />
       <QuoteForm
         defaultService={s.slug}
         heading={`Get a quote for ${s.shortName.toLowerCase()}`}
         sub="Tell us the basics and we will come back with a real number — usually within one business hour."
       />
-      <CtaBanner />
     </>
   );
 }

@@ -25,7 +25,7 @@ export default function CtaBanner() {
               {business.telephoneDisplay}
             </a>
           </div>
-          <Link href="/contact-us" className="btn btn-white">
+          <Link href="#quote" className="btn btn-white">
             Get a Free Quote →
           </Link>
         </div>

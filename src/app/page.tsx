@@ -51,7 +51,7 @@ export default function Home() {
             </p>
 
             <div className="hero-actions">
-              <a href="#cta-banner" className="btn btn-red">Get a Free Estimate →</a>
+              <a href="#quote" className="btn btn-red">Get a Free Estimate →</a>
               <a href="tel:4808779808" className="btn btn-ghost-white">📞 (480) 877-9808</a>
             </div>
 
@@ -244,132 +244,24 @@ export default function Home() {
             <div className="dust"></div>
             <div className="dust"></div>
             <div className="dust"></div>
-            {/*
-            ╔══════════════════════════════════════════════════════════════╗
-            ║  VAN ASSET — SWAP THIS BLOCK TO USE YOUR REAL VAN IMAGE     ║
-            ║                                                              ║
-            ║  OPTION A — PNG/WebP with transparent background (easiest): ║
-            ║    Delete the <svg>…</svg> below and replace with:          ║
-            ║    <img className="van-asset-img"                               ║
-            ║         src="assets/lint-away-van.png"                      ║
-            ║         alt="Lint Away Van"                                  ║
-            ║         width="500" height="110" />                           ║
-            ║                                                              ║
-            ║  OPTION B — Keep the SVG placeholder until art is ready.    ║
-            ║                                                              ║
-            ║  The .van-wrap div handles ALL animation — the image inside  ║
-            ║  just needs to be 500 × 110 px (or edit width/height above). ║
-            ║  Wheel spin animation targets .wheel-fl and .wheel-rl —     ║
-            ║  if using a PNG, remove those two <g> elements or hide them. ║
-            ╚══════════════════════════════════════════════════════════════╝
-            */}
-            <svg className="lint-van van-asset-svg" width="500" height="110" viewBox="0 0 500 110" xmlns="http://www.w3.org/2000/svg">
-              {/* Van shadow */}
-              <ellipse cx="260" cy="106" rx="210" ry="6" fill="rgba(0,0,0,0.18)" filter="url(#vanBlur)" />
-              <defs>
-                <filter id="vanBlur"><feGaussianBlur stdDeviation="3" /></filter>
-                <linearGradient id="vanBody" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#FFFFFF" />
-                  <stop offset="100%" stopColor="#F0F0F0" />
-                </linearGradient>
-                <linearGradient id="vanCabin" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#E8EAEC" />
-                  <stop offset="100%" stopColor="#D4D8DC" />
-                </linearGradient>
-                <linearGradient id="windshield" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#C8DCE8" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#A8C8DC" stopOpacity="0.9" />
-                </linearGradient>
-              </defs>
+            {/* The real van. Photographed side-on, background removed, so it
+                sits over the desert scene rather than in a box.
 
-              {/* Main van body (cargo area) */}
-              <rect x="90" y="12" width="380" height="78" rx="8" fill="url(#vanBody)" stroke="#D8D8D8" strokeWidth="1" />
-              {/* Cab/hood area */}
-              <path d="M15,55 Q15,12 55,12 L108,12 L108,90 L15,90 Z" fill="url(#vanCabin)" stroke="#C8C8C8" strokeWidth="1" />
-              {/* Hood slope */}
-              <path d="M15,55 Q30,30 55,22 L108,12" fill="none" stroke="#C0C4C8" strokeWidth="1" />
-              {/* Windshield */}
-              <path d="M28,54 Q30,28 58,22 L100,18 L100,70 L28,70 Z" fill="url(#windshield)" stroke="#B0C4D4" strokeWidth="1" />
-              {/* Windshield glare */}
-              <path d="M35,28 Q50,22 80,20 L82,28 Q55,30 38,35 Z" fill="white" opacity="0.35" />
-              {/* Side door line */}
-              <line x1="108" y1="12" x2="108" y2="90" stroke="#D0D0D0" strokeWidth="1.5" />
-              {/* Door handle */}
-              <rect x="116" y="52" width="18" height="5" rx="2.5" fill="#C0C4C8" />
-              {/* Cargo side windows (small) */}
-              <rect x="200" y="20" width="60" height="30" rx="3" fill="#B8D0E0" opacity="0.7" stroke="#C8D8E8" strokeWidth="0.5" />
-              {/* Side graphic stripe */}
-              <rect x="108" y="78" width="362" height="12" rx="0" fill="#45ABC0" opacity="0.85" />
-              {/* Lint Away logo text on van side */}
-              <text x="230" y="52" fontFamily="Fredoka, sans-serif" fontWeight="700" fontSize="16" fill="#1A1A2E" textAnchor="middle">Lint Away</text>
-              <text x="230" y="68" fontFamily="Nunito, sans-serif" fontWeight="600" fontSize="8.5" fill="#45ABC0" textAnchor="middle" letter-spacing="0.5">DUCT CLEANING</text>
-              {/* Phone number */}
-              <text x="370" y="48" fontFamily="Nunito, sans-serif" fontWeight="700" fontSize="9" fill="#1A1A2E" textAnchor="middle">480-877-9808</text>
-              <text x="370" y="60" fontFamily="Nunito, sans-serif" fontWeight="500" fontSize="7.5" fill="#555" textAnchor="middle">Professional Duct Cleaning</text>
-              <text x="370" y="71" fontFamily="Nunito, sans-serif" fontWeight="500" fontSize="7" fill="#777" textAnchor="middle">Residential &amp; Commercial</text>
-              {/* Mini Big Clumpy on van side */}
-              <circle cx="155" cy="50" r="22" fill="#8A8D9E" />
-              <circle cx="155" cy="50" r="20" fill="#9598A8" filter="url(#vanBlur2)" />
-              <defs><filter id="vanBlur2"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" /><feDisplacementMap in="SourceGraphic" scale="4" /></filter></defs>
-              {/* Mini eyes */}
-              <ellipse cx="149" cy="47" rx="6" ry="6.5" fill="white" />
-              <ellipse cx="161" cy="47" rx="6" ry="6.5" fill="white" />
-              <circle cx="150" cy="48" r="4" fill="#1E90FF" />
-              <circle cx="162" cy="48" r="4" fill="#1E90FF" />
-              <circle cx="150" cy="48" r="2" fill="#1A1A2E" />
-              <circle cx="162" cy="48" r="2" fill="#1A1A2E" />
-              <circle cx="148" cy="46" r="1.5" fill="white" opacity="0.9" />
-              <circle cx="160" cy="46" r="1.5" fill="white" opacity="0.9" />
-              {/* Mini smile */}
-              <path d="M148 57 Q155 63 162 57" stroke="#3A3D4E" strokeWidth="2" fill="none" strokeLinecap="round" />
-              {/* Van roof rack / equipment */}
-              <rect x="130" y="6" width="220" height="8" rx="3" fill="#C8CACC" stroke="#B8BABC" strokeWidth="0.5" />
-              <rect x="145" y="1" width="8" height="7" rx="2" fill="#B0B4B8" />
-              <rect x="170" y="1" width="40" height="6" rx="2" fill="#B0B4B8" />
-              <rect x="225" y="1" width="8" height="7" rx="2" fill="#B0B4B8" />
-              {/* Front bumper */}
-              <rect x="10" y="82" width="18" height="8" rx="3" fill="#C0C4C8" />
-              {/* Headlight */}
-              <rect x="14" y="60" width="14" height="10" rx="3" fill="#FFFDE0" stroke="#E0D890" strokeWidth="0.5" />
-              <rect x="14" y="60" width="14" height="5" rx="2" fill="white" opacity="0.6" />
-              {/* Rear lights */}
-              <rect x="466" y="22" width="10" height="18" rx="3" fill="#E84040" opacity="0.9" />
-              <rect x="466" y="22" width="10" height="8" rx="2" fill="#FF6060" opacity="0.7" />
-              {/* Rear bumper */}
-              <rect x="462" y="82" width="18" height="8" rx="3" fill="#C0C4C8" />
-              {/* License plate area */}
-              <rect x="458" y="68" width="22" height="14" rx="2" fill="#F0F0E8" stroke="#C8C8B8" strokeWidth="0.5" />
-              <text x="469" y="78" fontFamily="monospace" fontSize="5.5" fill="#333" textAnchor="middle">AZ•123</text>
-
-              {/* FRONT WHEEL — cy=92, r=18 → bottom at y=110 = SVG bottom = strip top line */}
-              <g className="wheel-fl" style={{transformOrigin: '68px 92px'}}>
-                <circle cx="68" cy="92" r="18" fill="#2A2A2A" />
-                <circle cx="68" cy="92" r="13" fill="#404040" />
-                <circle cx="68" cy="92" r="7"  fill="#808080" />
-                <circle cx="68" cy="92" r="3.5" fill="#B0B0B0" />
-                {/* spokes */}
-                <line x1="68" y1="79" x2="68" y2="92"  stroke="#606060" strokeWidth="2" />
-                <line x1="68" y1="92" x2="68" y2="105" stroke="#606060" strokeWidth="2" />
-                <line x1="55" y1="92" x2="81" y2="92"  stroke="#606060" strokeWidth="2" />
-                <line x1="59" y1="83" x2="77" y2="101" stroke="#606060" strokeWidth="1.5" />
-                <line x1="77" y1="83" x2="59" y2="101" stroke="#606060" strokeWidth="1.5" />
-              </g>
-              {/* REAR WHEEL — cy=92, r=18 → bottom at y=110 = SVG bottom = strip top line */}
-              <g className="wheel-rl" style={{transformOrigin: '400px 92px'}}>
-                <circle cx="400" cy="92" r="18" fill="#2A2A2A" />
-                <circle cx="400" cy="92" r="13" fill="#404040" />
-                <circle cx="400" cy="92" r="7"  fill="#808080" />
-                <circle cx="400" cy="92" r="3.5" fill="#B0B0B0" />
-                <line x1="400" y1="79" x2="400" y2="92"  stroke="#606060" strokeWidth="2" />
-                <line x1="400" y1="92" x2="400" y2="105" stroke="#606060" strokeWidth="2" />
-                <line x1="387" y1="92" x2="413" y2="92"  stroke="#606060" strokeWidth="2" />
-                <line x1="391" y1="83" x2="409" y2="101" stroke="#606060" strokeWidth="1.5" />
-                <line x1="409" y1="83" x2="391" y2="101" stroke="#606060" strokeWidth="1.5" />
-              </g>
-              {/* Wheel wells */}
-              <path d="M40,90 Q68,70 96,90" fill="#D0D4D8" stroke="#C0C4C8" strokeWidth="1" />
-              <path d="M372,90 Q400,70 428,90" fill="#D0D4D8" stroke="#C0C4C8" strokeWidth="1" />
-            </svg>
+                It FACES LEFT, which is why the scene animates right-to-left
+                (see `vanDrive` in globals.css). The placeholder SVG this
+                replaced also faced left while the animation ran left-to-right,
+                so the van appeared to drive backwards the whole time. If a
+                future van image faces right, switch `.van-wrap` to the
+                `vanDriveRight` keyframes and flip the dust direction with it. */}
+            <img
+              className="van-asset-img"
+              src="/van-photo.webp"
+              alt="The Lint Away Duct Cleaning van — 480-877-9808, residential and commercial duct cleaning"
+              width={380}
+              height={201}
+              loading="eager"
+              decoding="async"
+            />
           </div>
         </div>
 
@@ -696,8 +588,11 @@ export default function Home() {
       </section>
 
 
-      <QuoteForm />
       <CtaBanner />
+      {/* The form sits LAST on purpose: every "Get a Quote" CTA on the site
+          targets #quote, so the destination of the site's primary action is the
+          form itself rather than another page with another button on it. */}
+      <QuoteForm />
     </>
   );
 }

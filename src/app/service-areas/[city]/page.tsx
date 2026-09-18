@@ -223,12 +223,12 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
         </div>
       </section>
 
+      <CtaBanner />
       <QuoteForm
         defaultCity={c.slug}
         heading={`Get a quote in ${c.name}`}
         sub={`Tell us what you need and we will come back with a real number. We are in ${c.name} regularly, so same-day is usually possible.`}
       />
-      <CtaBanner />
     </>
   );
 }

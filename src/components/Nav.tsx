@@ -49,7 +49,7 @@ export default function Nav() {
           <a className="nav-phone" href={business.telephoneHref}>
             {business.telephoneDisplay}
           </a>
-          <Link className="nav-cta" href="/contact-us">
+          <Link className="nav-cta" href="/#quote">
             Get a Quote
           </Link>
         </div>
@@ -74,7 +74,7 @@ export default function Nav() {
             {l.label}
           </Link>
         ))}
-        <Link href="/contact-us">Get a Quote</Link>
+        <Link href="/#quote">Get a Quote</Link>
         <a href={business.telephoneHref} style={{ color: 'var(--red)' }}>
           {business.telephoneDisplay}
         </a>

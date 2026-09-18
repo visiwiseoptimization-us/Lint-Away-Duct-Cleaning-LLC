@@ -233,13 +233,13 @@ export default async function CityServicePage({
         </div>
       </section>
 
+      <CtaBanner />
       <QuoteForm
         defaultCity={c.slug}
         defaultService={s.slug}
         heading={`${s.shortName} quote for ${c.name}`}
         sub={`Give us the basics and we will come back with a real number for your ${c.name} property.`}
       />
-      <CtaBanner />
     </>
   );
 }

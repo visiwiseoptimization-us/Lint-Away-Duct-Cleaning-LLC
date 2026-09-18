@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { business } from '@/data/business';
 import JsonLd from '@/components/JsonLd';
 import CtaBanner from '@/components/CtaBanner';
+import QuoteForm from '@/components/QuoteForm';
 import { breadcrumbNode } from '@/lib/schema';
 
 export const metadata: Metadata = {
@@ -70,6 +71,10 @@ export default function Reviews() {
       </section>
 
       <CtaBanner />
+      <QuoteForm
+        heading="Convinced? Get a free quote"
+        sub="Tell us what you need and we will come back with a real number — usually within one business hour."
+      />
     </>
   );
 }
